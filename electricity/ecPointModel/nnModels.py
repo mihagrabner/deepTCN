@@ -46,6 +46,17 @@ class QuantileLoss(Loss):
 
 
 class ResidualTCN(nn.Block):
+    """
+    Shortcut Conv BN Relu Conv BN add[shortcut, x] relu
+    channels = 11
+    kernel_size = 2
+    dilations: [1,2,4,8,16,20,32]
+    
+    Relu
+    
+    """
+    
+    
     def __init__(self,d, n_residue=11, k=2,  **kwargs):
         super(ResidualTCN, self).__init__(**kwargs)
         self.conv1 = nn.Conv1D(in_channels=n_residue, channels=n_residue, kernel_size=k, dilation=d)
@@ -59,18 +70,18 @@ class ResidualTCN(nn.Block):
         return nd.relu(out+x[:,:,-out.shape[2]:])
     
     
-class ResidualTCN2(nn.Block):
-    def __init__(self,d, n_residue=1, k=2,  **kwargs):
-        super(ResidualTCN2, self).__init__(**kwargs)
-        self.conv1 = nn.Conv1D(in_channels=n_residue, channels=n_residue, kernel_size=k, dilation=d)
-        self.bn1 = nn.BatchNorm()
-        self.conv2 = nn.Conv1D(in_channels=n_residue, channels=n_residue, kernel_size=k, dilation=d)
-        self.bn2 = nn.BatchNorm()
-
-    def forward(self, x):
-        out = nd.relu(self.bn1(self.conv1(x)))
-        out = self.bn2(self.conv2(out))
-        return nd.relu(out)+x[:,:,-out.shape[2]:]
+#class ResidualTCN2(nn.Block):
+#    def __init__(self,d, n_residue=1, k=2,  **kwargs):
+#        super(ResidualTCN2, self).__init__(**kwargs)
+#        self.conv1 = nn.Conv1D(in_channels=n_residue, channels=n_residue, kernel_size=k, dilation=d)
+#        self.bn1 = nn.BatchNorm()
+#        self.conv2 = nn.Conv1D(in_channels=n_residue, channels=n_residue, kernel_size=k, dilation=d)
+#        self.bn2 = nn.BatchNorm()
+#
+#    def forward(self, x):
+#        out = nd.relu(self.bn1(self.conv1(x)))
+#        out = self.bn2(self.conv2(out))
+#        return nd.relu(out)+x[:,:,-out.shape[2]:]
      
 
 class Residual(nn.HybridBlock):
