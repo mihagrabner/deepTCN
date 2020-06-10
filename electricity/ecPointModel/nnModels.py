@@ -98,6 +98,13 @@ class Residual(nn.HybridBlock):
         return nd.relu(out + x) 
     
 class futureResidual(nn.HybridBlock):
+    """
+    Dense(FLatten=False pomeni -> If false, all but the last axis of input data are kept the same, and the transformation applies on the last axis.
+    
+    Dense(64, flatten=False) BN Relu Dense(units=xDim = 22, ,flatten=False)
+    
+    """
+    
     def __init__(self, xDim,  **kwargs):
         super(futureResidual, self).__init__(**kwargs)
         self.fc1 = nn.Dense(64,flatten=False)
