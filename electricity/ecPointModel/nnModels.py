@@ -100,7 +100,7 @@ class futureResidual(nn.HybridBlock):
         return nd.relu(x_conv + out)
     
     
-    
+   # to je glavni model ki ga kliče
 class TCN(nn.Block):
     def __init__(self, dilation_depth=2, n_repeat=5, **kwargs):
         super(TCN, self).__init__(**kwargs)
