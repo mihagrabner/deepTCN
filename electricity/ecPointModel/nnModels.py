@@ -169,7 +169,7 @@ class TCN(nn.Block):
         output = nd.transpose(output, axes=(0, 2, 1))
         
         #kip_connections = []
-        for sub_TCN in self.TCN:
+        for sub_TCN in self.TCN:  # iteriraš čez ResidualTCN blocke
             output = self.residue_forward(output, sub_TCN)  # residue_forward je metoda definirana spodaj v tem classu
             
         output=nd.transpose(output, axes=(0,2,1))
