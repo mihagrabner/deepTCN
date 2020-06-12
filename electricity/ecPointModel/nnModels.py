@@ -170,7 +170,7 @@ class TCN(nn.Block):
         
         #kip_connections = []
         for sub_TCN in self.TCN:
-            output = self.residue_forward(output, sub_TCN)
+            output = self.residue_forward(output, sub_TCN)  # residue_forward je metoda definirana spodaj v tem classu
             
         output=nd.transpose(output, axes=(0,2,1))
         output = nd.reshape(output,(output.shape[0], 1,-1))
