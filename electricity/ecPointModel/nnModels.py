@@ -160,16 +160,25 @@ class TCN(nn.Block):
                 self.nHour_embedding(x_cat[:,:,6]),
                              dim=2)
         input_store = nd.broadcast_axis(store_embed[:,0:1,:],axis=1,size=168)
-        output = nd.concat(input_store,x_num.reshape((x_num.shape[0],x_num.shape[1],1)), dim=2)
-        output = nd.transpose(output, axes=(0,2,1))
+        
+        # store id (in-dependent feature) is added as an extra channel to the input ts
+        # add extra dimmension to ts (x_num) and concat with store id
+        output = nd.concat(input_store, x_num.reshape((x_num.shape[0], x_num.shape[1], 1)), dim=2)
+        
+        # reshape to (m, channels, width)
+        output = nd.transpose(output, axes=(0, 2, 1))
+        
         #kip_connections = []
         for sub_TCN in self.TCN:
             output = self.residue_forward(output, sub_TCN)
+            
         output=nd.transpose(output, axes=(0,2,1))
         output = nd.reshape(output,(output.shape[0], 1,-1))
         #print(output.shape)
+        
         output = nd.broadcast_axis(output, axis=1, size=24)
         #post_concat = nd.concat(output, embed_concat, dim=2)
+        
         output=self.net(self.post_res(output,embed_concat))
         return output
      
